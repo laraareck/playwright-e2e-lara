@@ -3,8 +3,9 @@ import { PlaywrightTestConfig } from '@playwright/test';
 const config: PlaywrightTestConfig = {
   testDir: 'src/scenarios',
   timeout: 120000,
-  retries: 0,
+  retries: process.env.CI ? 2 : 0,
   use: {
+    baseURL: 'https://br.shein.com',
     trace: 'on',
     channel: 'msedge',
     locale: 'pt-BR',
@@ -18,13 +19,9 @@ const config: PlaywrightTestConfig = {
     timeout: 30000
   },
   reporter: [
-    [
-      'html',
-      {
-        outputFolder: 'artifacts/report',
-        open: 'never'
-      }
-    ]
+    ['html', { outputFolder: 'artifacts/report', open: 'never' }],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['list']
   ]
 };
 export default config;
